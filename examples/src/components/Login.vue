@@ -76,6 +76,14 @@ export default {
       return /[\S]+/.test(this.username);
     },
   },
+  mounted() {
+    this.$store.dispatch('restoreSession', {
+      username: 'email@mail.dk',
+      refreshToken: 'randomToken',
+    }).then(() => {
+      this.$store.dispatch('getUserAttributes');
+    });
+  },
 };
 </script>
 

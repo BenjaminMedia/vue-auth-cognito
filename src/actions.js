@@ -27,7 +27,31 @@ export default function actionsFactory(config) {
   });
 
   return {
+    restoreSession({ commit }, { username, refreshToken }) {
 
+      const cognitoUser = new CognitoUser({
+        Pool: cognitoUserPool,
+        Username: username,
+      });
+
+      // Restore session without making an additional call to API
+      cognitoUser.signInUserSession = cognitoUser.getCognitoUserSession({
+        RefreshToken: refreshToken,
+      });
+
+      return new Promise((resolve, reject) => {
+        cognitoUser.refreshSession(cognitoUser.signInUserSession.getRefreshToken(), (err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          const constructedUser = constructUser(cognitoUser, cognitoUser.signInUserSession);
+          // Call AUTHENTICATE because it's utterly the same
+          commit(types.RESTORE_SESSION, constructedUser);
+          resolve(constructedUser);
+        });
+      });
+    },
     getCurrentUser({ commit }) {
       return new Promise((resolve, reject) => {
         const cognitoUser = cognitoUserPool.getCurrentUser();
