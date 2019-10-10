@@ -81,6 +81,7 @@ export default function actionsFactory(config) {
       const authDetails = new AuthenticationDetails({
         Username: payload.username,
         Password: payload.password,
+        ValidationData: payload.validationData || [],
       });
 
       const cognitoUser = new CognitoUser({
