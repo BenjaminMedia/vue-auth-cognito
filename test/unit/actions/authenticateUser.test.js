@@ -8,6 +8,9 @@ import * as types from '../../../src/mutation-types';
 const payload = {
   username: 'test',
   password: 'Qwerty123!',
+  validationData: {
+    brand: 'test',
+  },
 };
 
 test('authenticateUser', { timeout: 500 }, (t) => {
@@ -28,6 +31,7 @@ test('authenticateUser', { timeout: 500 }, (t) => {
     {
       Username: payload.username,
       Password: payload.password,
+      ValidationData: payload.validationData,
     },
     "AuthenticationDetails constructor's first argument should have { Username, Password } properties");
 
